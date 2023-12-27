@@ -132,6 +132,7 @@ async def next_product_handler(call: types.CallbackQuery, state: FSMContext):
     products = await get_all_products()
     product = await next_product(products, index)
     if product:
+        await call.message.delete()
         image = product[3]
         caption = f"""
 ⚜️ Nomi: {product[1]}
@@ -154,6 +155,7 @@ async def back_product(call: types.CallbackQuery, state: FSMContext):
     products = await get_all_products()
     product = await previous_product(products, index)
     if product:
+        await call.message.delete()
         image = product[3]
         caption = f"""
 ⚜️ Nomi: {product[1]}
@@ -168,3 +170,9 @@ async def back_product(call: types.CallbackQuery, state: FSMContext):
         text = "Bundan oldin mahsulot yo'q"
         await call.answer(text=text, show_alert=True)
 
+
+@dp.message_handler(text="☎️ Aloqa")
+async def contact_handler(message: types.Message):
+    text = ("Bu bot Mars IT Schoolning 688-guruhida o'qiydigon o'quvchi tomonidan yaratildi: \n"
+            "@asd6033")
+    await message.answer(text=text)
