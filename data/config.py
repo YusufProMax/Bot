@@ -6,4 +6,11 @@ env.read_env()
 BOT_TOKEN = env.str("BOT_TOKEN")
 ADMINS = env.list("ADMINS")
 IP = env.str("ip")
-channel = (-1001937623255, 'Test', 'https://t.me/asd6099')
+channel = (-1002143671084, 'Test', 'https://t.me/asd603309')
+
+
+DB_USER = env.str("DB_USER")
+DB_PASS = env.str("DB_PASS")
+DB_HOST = env.str("DB_HOST")
+DB_PORT = env.str("DB_PORT")
+DB_NAME = env.str("DB_NAME")

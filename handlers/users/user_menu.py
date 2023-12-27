@@ -1,9 +1,10 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 
+from keyboards.inline.user import product_pagination
 from loader import dp
 from aiogram import types
-from utils.db_api.user_command import get_user, add_product, get_my_products, get_all_products, delete_product
+from utils.db_api.user_command import get_user, add_product, get_my_products, get_all_products, previous_product, next_product
 from keyboards.default.user_default import *
 from states.user import SpaceProduct
 
@@ -105,18 +106,65 @@ async def back_handler(message: types.Message):
     
 
 @dp.message_handler(text="🚀 Space Shop")
-async def my_products_handler(message: types.Message):
-    all_products = await get_all_products()
-    if all_products:
-        for product in all_products:
-            text = (f"⚜️ Nomi: {product['product_name']} \n"
-                    f"⚜️ Narxi: {product['product_price']} \n"
-                    f"⚜️ About: {product['description']} \n"
-                    f"⚜️ Aloqa uchun: {product['contact']}")
-            await message.answer_photo(photo=product['product_photo'], caption=text, reply_markup=user_main_menu)
+async def my_products_handler(message: types.Message, state: FSMContext):
+    products = await get_all_products()
+    if products:
+        product = products[0]
+        image = product[3]
+        caption = f"""
+⚜️ Nomi: {product[1]}
+⚜️ Narxi: {product[2]}
+⚜️ About: {product[4]}
+⚜️ Aloqa: {product[5]}
+"""
+        await message.answer_photo(photo=image, caption=caption, reply_markup=await product_pagination(0, len(products)))
+        await state.set_state("space-shop-state")
+        await state.update_data(index=0)
     else:
-        text = "Space Shopda xali tovarlar mavjud emas"
-        await message.answer(text=text, reply_markup=user_main_menu)
+        text = "Space shopda mahsulotlar mavjud emas"
+        await message.answer(text=text)
 
 
+@dp.callback_query_handler(text="next", state="space-shop-state")
+async def next_product_handler(call: types.CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    index = int(data.get('index'))
+    products = await get_all_products()
+    product = await next_product(products, index)
+    if product:
+        image = product[3]
+        caption = f"""
+⚜️ Nomi: {product[1]}
+⚜️ Narxi: {product[2]}
+⚜️ About: {product[4]}
+⚜️ Aloqa: {product[5]}
+"""
+        await call.message.answer_photo(photo=image, caption=caption, reply_markup=await product_pagination(index + 1, len(products)))
+        await state.set_state("space-shop-state")
+        await state.update_data(index=index + 1)
+    else:
+        text = "Bundan keyin mahsulot yo'q"
+        await call.answer(text=text, show_alert=True)
+
+
+@dp.callback_query_handler(text="back", state="space-shop-state")
+async def back_product(call: types.CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    index = int(data.get('index'))
+    products = await get_all_products()
+    product = await previous_product(products, index)
+    if product:
+        image = product[3]
+        caption = f"""
+⚜️ Nomi: {product[1]}
+⚜️ Narxi: {product[2]}
+⚜️ About: {product[4]}
+⚜️ Aloqa: {product[5]}
+"""
+        await call.message.answer_photo(photo=image, caption=caption, reply_markup=await product_pagination(index - 1, len(products)))
+        await state.set_state("space-shop-state")
+        await state.update_data(index=index - 1)
+    else:
+        text = "Bundan oldin mahsulot yo'q"
+        await call.answer(text=text, show_alert=True)
 

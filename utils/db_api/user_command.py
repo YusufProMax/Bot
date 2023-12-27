@@ -76,53 +76,17 @@ async def delete_product(chat_id: int, product_id: int):
         print(exc)
         return False
 
-async def product_change_name(data: dict):
+async def next_product(products, index):
     try:
-        query = space_shop.update().values(
-            space_shop.c.product_name == data.get('new_name')).where(
-            space_shop.c.id == int(data.get('product_id')), space_shop.c.chat_id == int(data.get('chat_id'))
-        )
-        await database.execute(query=query)
-        return True
-    except Exception as exc:
-        print(exc)
+        return products[index + 1]
+    except IndexError:
         return False
 
 
-async def product_change_price(data: dict):
+async def previous_product(products, index):
     try:
-        query = space_shop.update().values(
-            space_shop.c.product_price == int(data.get('new_price'))).where(
-            space_shop.c.id == int(data.get('product_id')), space_shop.c.chat_id == int(data.get('chat_id'))
-        )
-        await database.execute(query=query)
-        return True
-    except Exception as exc:
-        print(exc)
-        return False
-
-
-async def product_change_photo(data: dict):
-    try:
-        query = space_shop.update().values(
-            space_shop.c.product_photo == data.get('new_photo')).where(
-            space_shop.c.id == int(data.get('product_id')), space_shop.c.chat_id == int(data.get('chat_id'))
-        )
-        await database.execute(query=query)
-        return True
-    except Exception as exc:
-        print(exc)
-        return False
-
-
-async def product_change_contact(data: dict):
-    try:
-        query = space_shop.update().values(
-            space_shop.c.contact == data.get('new_contact')).where(
-            space_shop.c.id == int(data.get('product_id')), space_shop.c.chat_id == int(data.get('chat_id'))
-        )
-        await database.execute(query=query)
-        return True
-    except Exception as exc:
-        print(exc)
+        if index == 0:
+            return False
+        return products[index - 1]
+    except IndexError:
         return False

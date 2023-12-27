@@ -15,17 +15,28 @@ class CheckSub(BaseMiddleware):
     async def on_pre_process_update(self, update: types.update, data: dict):
         user_id = 0
         if update.message:
-            if update.message.text == "/start":
-                return
             user_id = update.message.chat.id
+            if update.message.text == "/start":
+                checker = await check(user_id=user_id, channel_id=-1002143671084)
+                if not checker:
+                    text = "Kanalga a'zo bo'ling"
+                    await update.message.answer(text=text, reply_markup=check_inline)
+                    raise CancelHandler()
+                else:
+                    return
+
         elif update.callback_query:
-            if update.callback_query.data == "check":
-                return
             user_id = update.callback_query.message.chat.id
+            if update.callback_query.data == "check":
+                checker = await check(user_id=user_id, channel_id=-1002143671084)
+                if not checker:
+                    text = "Kanalga a'zo bo'ling"
+                    await update.callback_query.message.answer(text=text, reply_markup=check_inline)
+                    raise CancelHandler()
+                else:
+                    return
 
-        checker = await check(user_id=user_id, channel_id=-1001937623255)
-
-
+        checker = await check(user_id=user_id, channel_id=-1002143671084)
         if not checker:
             text = "Kanalga a'zo bo'ling"
             await update.message.answer(text=text, reply_markup=check_inline)
