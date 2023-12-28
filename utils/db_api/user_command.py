@@ -36,7 +36,6 @@ async def add_product(product_data: dict):
             product_photo=product_data.get('product_photo'),
             description=product_data.get('description'),
             contact=product_data.get('contact'),
-            status=product_data.get('status'),
             chat_id=product_data.get('chat_id')
         )
         new_product = await database.execute(query=query)
@@ -59,7 +58,7 @@ async def get_my_products(chat_id: int):
 
 async def get_all_products():
     try:
-        query = space_shop.select().where(space_shop.c.status=="Active")
+        query = space_shop.select()
         products = await database.fetch_all(query=query)
         return products
     except Exception as exc:

@@ -28,8 +28,7 @@ async def my_products_handler(message: types.Message):
             text = (f"Id | {product['id']} \n"
                     f"⚜️ Nomi: {product['product_name']} \n"
                     f"⚜️ Narxi: {product['product_price']} \n"
-                    f"⚜️ About: {product['description']} \n"
-                    f"⚜️ Status: {product['status']}")
+                    f"⚜️ About: {product['description']} \n")
             await message.answer_photo(photo=product['product_photo'], caption=text, reply_markup=user_product_menu)
     else:
         text = "Siz xali beri mahsulot qo'shmagansiz"
@@ -79,14 +78,7 @@ async def get_product_handler(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=SpaceProduct.contact, content_types=types.ContentType.CONTACT)
 async def get_number_handler(message: types.Message, state: FSMContext):
-    await state.update_data(contact=message.contact.phone_number)
-    text = "Mahsulot statusini kiriting:"
-    await message.answer(text=text, reply_markup=product_status)
-    await SpaceProduct.status.set()
-
-@dp.message_handler(state=SpaceProduct.status)
-async def get_product_handler(message: types.Message, state: FSMContext):
-    await state.update_data(status=message.text, chat_id=message.chat.id)
+    await state.update_data(contact=message.contact.phone_number, chat_id=message.chat.id)
     product_data = await state.get_data()
     new_product = await add_product(product_data)
     if new_product:
@@ -97,18 +89,24 @@ async def get_product_handler(message: types.Message, state: FSMContext):
     await state.finish()
 
 
+
 # BACK
 
 @dp.message_handler(text="⬅️ Asosiy menyuga qaytish")
 async def back_handler(message: types.Message):
     text = "Asosiy menyu"
     await message.answer(text=text, reply_markup=user_main_menu)
-    
+
 
 @dp.message_handler(text="🚀 Space Shop")
 async def my_products_handler(message: types.Message, state: FSMContext):
     products = await get_all_products()
     if products:
+        text = "🚀 Space Shop"
+        await message.answer(
+            text=text, reply_markup=ReplyKeyboardRemove(),
+        )
+        await message.delete()
         product = products[0]
         image = product[3]
         caption = f"""
@@ -170,6 +168,13 @@ async def back_product(call: types.CallbackQuery, state: FSMContext):
         text = "Bundan oldin mahsulot yo'q"
         await call.answer(text=text, show_alert=True)
 
+
+@dp.callback_query_handler(text="back_menu", state="space-shop-state")
+async def back_handler(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
+    text = "Asosiy menyu"
+    await call.message.answer(text=text, reply_markup=user_main_menu)
+    await state.finish()
 
 @dp.message_handler(text="☎️ Aloqa")
 async def contact_handler(message: types.Message):

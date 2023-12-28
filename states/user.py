@@ -11,27 +11,4 @@ class SpaceProduct(StatesGroup):
     product_price = State()
     product_photo = State()
     description = State()
-    status = State()
     contact = State()
-
-
-
-class ChangeName(StatesGroup):
-    id = State()
-    chat_id = State()
-    new_name = State()
-
-class ChangePrice(StatesGroup):
-    id = State()
-    chat_id = State()
-    new_price = State()
-
-class ChangePhoto(StatesGroup):
-    id = State()
-    chat_id = State()
-    new_photo = State()
-
-class ChangeContact(StatesGroup):
-    id = State()
-    chat_id = State()
-    new_contact = State()

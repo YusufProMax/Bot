@@ -24,6 +24,5 @@ space_shop = sqlalchemy.Table(
     sqlalchemy.Column('product_photo', sqlalchemy.String),
     sqlalchemy.Column("description", sqlalchemy.String, nullable=True),
     sqlalchemy.Column('contact', sqlalchemy.String),
-    sqlalchemy.Column("status", sqlalchemy.String),
     sqlalchemy.Column("chat_id", sqlalchemy.BigInteger)
 )

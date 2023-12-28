@@ -1,13 +1,6 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-
-
-
-
-
-
-
 user_main_menu = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -53,7 +46,13 @@ user_phone_share = ReplyKeyboardMarkup(
     ], resize_keyboard=True
 )
 
-
+back = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Ortga")
+        ]
+    ], resize_keyboard=True
+)
 
 user_change_menu = ReplyKeyboardMarkup(
     keyboard=[

@@ -1,6 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-
 check_inline = InlineKeyboardMarkup(
     inline_keyboard=[
         [
@@ -20,7 +19,10 @@ async def product_pagination(index, total_products):
             [
                 InlineKeyboardButton(text="Ortga", callback_data="back"),
                 InlineKeyboardButton(text=f"{index + 1}/{total_products}", callback_data="show"),
-                InlineKeyboardButton(text="Keyingi", callback_data="next")
+                InlineKeyboardButton(text="Keyingi", callback_data="next"),
+            ],
+            [
+                InlineKeyboardButton(text="Asosiy menyu", callback_data="back_menu")
             ]
         ]
     )
