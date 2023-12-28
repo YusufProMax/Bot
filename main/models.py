@@ -20,7 +20,7 @@ space_shop = sqlalchemy.Table(
     metadata,
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
     sqlalchemy.Column("product_name", sqlalchemy.String),
-    sqlalchemy.Column("product_price", sqlalchemy.BigInteger),
+    sqlalchemy.Column("product_price", sqlalchemy.String),
     sqlalchemy.Column('product_photo', sqlalchemy.String),
     sqlalchemy.Column("description", sqlalchemy.String, nullable=True),
     sqlalchemy.Column('contact', sqlalchemy.String),

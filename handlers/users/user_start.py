@@ -63,6 +63,6 @@ async def get_login_handler(message: types.Message, state: FSMContext):
             await message.answer(text=text)
             await state.finish()
     else:
-        text = "Siz kiritgan modme_id yoki login xato. \n Qayta urinib ko'ring. \n modme_id ni kiriting: "
+        text = "Siz kiritgan modme_id yoki parol xato. \n Qayta urinib ko'ring. \n modme_id ni kiriting: "
         await message.answer(text=text)
         await RegisterState.modme_id.set()

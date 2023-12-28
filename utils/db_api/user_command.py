@@ -32,7 +32,7 @@ async def add_product(product_data: dict):
     try:
         query = space_shop.insert().values(
             product_name=product_data.get('product_name'),
-            product_price=int(product_data.get('product_price')),
+            product_price=product_data.get('product_price'),
             product_photo=product_data.get('product_photo'),
             description=product_data.get('description'),
             contact=product_data.get('contact'),
