@@ -102,11 +102,10 @@ async def back_handler(message: types.Message):
 async def my_products_handler(message: types.Message, state: FSMContext):
     products = await get_all_products()
     if products:
-        text = "🚀 Space Shop"
+        text = "Barcha mahsulotlar: "
         await message.answer(
             text=text, reply_markup=ReplyKeyboardRemove(),
         )
-        await message.delete()
         product = products[0]
         image = product[3]
         caption = f"""
