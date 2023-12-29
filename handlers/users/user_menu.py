@@ -57,9 +57,15 @@ async def get_product_handler(message: types.Message, state: FSMContext):
 @dp.message_handler(state=SpaceProduct.product_price)
 async def get_product_handler(message: types.Message, state: FSMContext):
     await state.update_data(product_price=message.text)
-    text = "Mahsulot rasmini kiriting: "
-    await message.answer(text=text)
-    await SpaceProduct.product_photo.set()
+    price = message.text
+    if price.isalpha() or price.isalnum():
+        text = "Narx faqatgina raqamlardan tashkil topishi kerak"
+        await message.answer(text=text)
+        await SpaceProduct.product_price.set()
+    else:
+        text = "Mahsulot rasmini kiriting: "
+        await message.answer(text=text)
+        await SpaceProduct.product_photo.set()
 
 
 @dp.message_handler(state=SpaceProduct.product_photo, content_types=types.ContentType.PHOTO)
